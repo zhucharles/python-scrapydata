@@ -1,0 +1,12 @@
+# Netscape HTTP Cookie File
+# http://curl.haxx.se/rfc/cookie_spec.html
+# This is a generated file!  Do not edit.
+
+.login.sina.com.cn	TRUE	/	FALSE	1511314068	ALC	ac%3D2%26bt%3D1479778068%26cv%3D5.0%26et%3D1511314068%26scf%3D%26uid%3D3815666512%26vf%3D0%26vs%3D0%26vt%3D0%26es%3D5d9af0ea7e28ae28707833b797d6f7b1
+.login.sina.com.cn	TRUE	/	FALSE		LT	1479778068
+.login.sina.com.cn	TRUE	/	FALSE		tgc	TGT-MzgxNTY2NjUxMg==-1479778068-xd-2E112DDAF5505EABA3B6B30E33B6539B
+.sina.com.cn	TRUE	/	FALSE	1511314068	ALF	1511314068
+.sina.com.cn	TRUE	/	FALSE	1795138068	SCF	AiGvEiBsXlzssvIo1T9tRRfNHh27gfDOvMNpJZW3iuUhD0MDbkQ3meY88nBaxfBPlaj16v2RwZJZ3dSJy84CnS0.
+.sina.com.cn	TRUE	/	FALSE		SUB	_2A251N-9EDeTxGeVG6lcX9ijJyj6IHXVWRUeMrDV_PUNbm9AKLUTikW8sldMxosUQOpEhdcAEU-le6BOstA..
+.sina.com.cn	TRUE	/	FALSE		SUBP	0033WrSXqPxfM725Ws9jqgMF55529P9D9W5Haujr-W3aFpl1sG5HoUay5NHD95Q01h2fSoqcSK2EWs4Dqcjdi--Xi-iWiK.pi--NiKLsi-z0i--ci-zpiKnN
+.sina.com.cn	TRUE	/	FALSE	1511314068	sso_info	v02m6alo5qztKWRk5yljpOQpZCToKWRk5iljoOgpZCjnLOOg4S1jaOYto2ThLKJp5WpmYO0s46DhLWNo5i2jZOEsg==

@@ -1,0 +1,17 @@
+如何爬虫？
+1.利用微博search来搜索相关关键词，关键词事先存储在文件中
+关键词有：
+深港通（英文的SZ-HK connect、SZ-HK stock、shenzhen-hong kong connect）
+沪港通（英文的SH-HK connect、SH-HK stock、shanghai-hong kong connect）
+
+2.爬虫思路
+查找关键词，利用下面路径，使用POST方法
+如果SHSZHK存在，则随机选择一个关键词进行搜索，搜索结束后去掉
+
+排除微博为空
+
+在微博页面中，如果有图片的话，会分成两个div显示，第一个div会显示文字内容，第二个div显示图片和评论等内容
+，如果没有图片的话，只会显示一个div，文字评论等都会在里面显示
+
+已经访问的链接
+

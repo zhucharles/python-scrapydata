@@ -50,6 +50,7 @@ class WeiboLogin():
     def __init__(self):
         # 保存cookie
         self.cj = cookielib.MozillaCookieJar(self.cookiefilename)
+        print("self.cj",self.cj)
         cookie_support = urllib2.HTTPCookieProcessor(self.cj)
         opener = urllib2.build_opener(cookie_support, urllib2.HTTPHandler)
         urllib2.install_opener(opener)
@@ -91,11 +92,17 @@ class WeiboLogin():
         global postData
         postData['servertime'] = servertime
         postData['nonce'] = nonce
+        print("nonce",nonce)
         postData['su'] = self._get_user(username)
+        print("postData['su']", postData['su'])
         postData['sp'] = self._get_pwd(password, servertime, nonce, pubkey)
+        print("postData['sp']", postData['sp'])
         postData['rsakv'] = rsakv
+        print("rsakv",rsakv)
         # # 处理302重定向
+        print("postdata", postData)
         post = urllib.urlencode(postData)
+        print post
 
         loginUrl = self.loginURL
         print self.loginURL , post , self.myHeader
@@ -130,6 +137,7 @@ class WeiboLogin():
             # mycookies = " "
             # for c in self.cj:
             #     mycookies += c.name + '=' + c.value + ';'
+            print("self.cj:",self.cj)
             with open("cookies.txt", 'wb+') as f:
                 for cookie in self.cj:
                     f.write(str(cookie) + '\n')

@@ -6,10 +6,7 @@ from weibostock.items import InformationItem,TweetsItem
 import weibostock.login as login
 from scrapy.selector import Selector
 import weibostock.info as info
-import urllib2
-import urllib
-from random import choice
-import cookielib
+
 
 class WeiboStockSpider(Spider):
     SZSHHK = info.SZSHHK
@@ -32,16 +29,17 @@ class WeiboStockSpider(Spider):
             self.start_urls.append(loginurl)
             # 创建MozillaCookieJar实例对象
             self.cookies = weibo.getCookieInfo()
-            print "self.cookies:", self.cookies
+            print("self.cookies:", self.cookies)
 
 
     def parse(self, response):
-        # print "response:",response.body
-        if response.body.find('feedBackUrlCallBack') != -1:
+        body = response.body.decode()
+        print("response:",body)
+        if body.find('feedBackUrlCallBack') != -1:
             #print response.body
 
             url = 'http://weibo.cn/'
-            print "self.cookies:", self.cookies
+            print("self.cookies:", self.cookies)
 
             # 查找关键词，利用下面路径，使用POST方法
             # 如果SHSZHK存在，则随机选择一个关键词进行搜索，搜索结束后去掉
@@ -63,6 +61,7 @@ class WeiboStockSpider(Spider):
         #print response.body
         # 获取关注者微博信息
         # 将当前关注者的基本信息存入item中
+
         selector = Selector(response)
         Tweets = selector.xpath('//div[@class="c"]')
         if Tweets:
@@ -80,7 +79,7 @@ class WeiboStockSpider(Spider):
                         if mark_id not in self.Tweets_ID:
                             tweetsItem = TweetsItem()
                             tweetsItem["_id"] = mark_id
-                            print "mark_id:",mark_id
+                            print("mark_id:",mark_id)
                             contentTemp = everytweet.xpath('div[1]/span[@class="ctt"]')
                             content = contentTemp.xpath('string(.)').extract()
 
@@ -88,7 +87,7 @@ class WeiboStockSpider(Spider):
                             #如果没有图片的话，只会显示一个div，文字评论等都会在里面显示
                             mydiv = ""
                             if everytweet.xpath('div[2]').extract():
-                                print "test temp:", everytweet.xpath('div[2]').extract()
+                                print("test temp:", everytweet.xpath('div[2]').extract())
                                 mydiv = everytweet.xpath('div[2]')
                                 timeloc = mydiv.xpath('span[@class="ct"]/text()').extract()
                                 # picurl = everytweet.xpath('div[2]/a[2]/img/@src').extract()
@@ -97,7 +96,7 @@ class WeiboStockSpider(Spider):
                                 transfer = mydiv.xpath('a[4]/text()').extract()
                                 comment = mydiv.xpath('a[5]/text()').extract()
                             elif everytweet.xpath('div[1]').extract():
-                                print "test temp:", everytweet.xpath('div[1]').extract()
+                                print("test temp:", everytweet.xpath('div[1]').extract())
                                 mydiv = everytweet.xpath('div[1]')
                                 timeloc = mydiv.xpath('span[@class="ct"]/text()').extract()
                                 # picurl = everytweet.xpath('div[2]/a[2]/img/@src').extract()
@@ -109,21 +108,21 @@ class WeiboStockSpider(Spider):
                                 continue
 
                             if content:
-                                print "content:", content
+                                print("content:", content)
                                 tweetsItem['Content'] = content[0]
                             if picurl:
-                                print picurl
+                                print(picurl)
                                 tweetsItem['Pic_Url'] = picurl[0]
                             if comment:
-                                print comment
+                                print(comment)
                                 # tweetsItem['Num_Comment'] = (comment[0])[(comment[0].index('[') + 1):comment[0].index(']')]
                                 tweetsItem['Num_Comment'] = comment[0]
                             if like:
-                                print like
+                                print(like)
                                 # tweetsItem['Num_Like'] = (like[0])[(like[0].index('[') + 1):like[0].index(']')]
                                 tweetsItem['Num_Like'] = like[0]
                             if transfer:
-                                print transfer
+                                print(transfer)
                                 # tweetsItem['NUm_Transfer'] = (transfer[0])[(transfer[0].index('[') + 1):transfer[0].index(']')]
                                 tweetsItem['NUm_Transfer'] = transfer[0]
                             if timeloc:

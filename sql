@@ -1,6 +1,6 @@
 CREATE DATABASE macbookInfo DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-
+#ahhaha
 
 CREATE TABLE `MacbookjdInfo` (  
 `No` INT(11) NOT NULL AUTO_INCREMENT,  

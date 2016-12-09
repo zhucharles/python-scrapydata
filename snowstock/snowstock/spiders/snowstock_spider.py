@@ -1,18 +1,75 @@
-# coding=utf8
+# coding=gbk
 from scrapy.spiders import Spider
 from scrapy.selector import Selector
+from scrapy import Request
+import time
+import json
 """
-    ç°åœ¨æ¥çœŸæ­£çˆ¬å»é›ªçƒé¡µé¢
-    æ ¼åŠ›ç”µå™¨ï¼šhttps://xueqiu.com/S/SZ000651
+    ÏÖÔÚÀ´ÕæÕıÅÀÈ¥Ñ©ÇòÒ³Ãæ
+    ¸ñÁ¦µçÆ÷£ºhttps://xueqiu.com/S/SZ000651
 """
 class SnowStockSpider(Spider):
     name = "snowstock"
-    start_urls = ["https://xueqiu.com/S/SZ000651"] #æ ¼åŠ›ç”µå™¨
+    #start_urls = ["https://xueqiu.com/statuses/search.json?count=10&comment=0&symbol=01918&hl=0&source=all&sort=alpha&page=5&_=1481013713658"] #¸ñÁ¦µçÆ÷
+    start_urls = "https://xueqiu.com/S/"
+    stock_ids = ["SZ000651"] #¿ÉÄÜÒÔºóÅÀÈ¡¶à¸ö¹ÉÆ±id
 
-    #å…ˆå°è¯•çˆ¬æ ¼åŠ›ç”µå™¨é¡µé¢çš„è¯„è®ºç®—äº†ï¼Œç„¶åæŒ‰æ—¶é—´è¿›è¡Œæ’åˆ—çœ‹æœ‰å¤šå°‘ä¸ªè¯„è®º
+    #ÏÈ³¢ÊÔÅÀ¸ñÁ¦µçÆ÷Ò³ÃæµÄÆÀÂÛËãÁË£¬È»ºó°´Ê±¼ä½øĞĞÅÅÁĞ¿´ÓĞ¶àÉÙ¸öÆÀÂÛ
+    """
+        ¶ÔÏÂÒ»¸öÆÀÂÛÒ³Ãæ£º
+        https://xueqiu.com/statuses/search.json?count=10&comment=0&symbol=01918&hl=0&source=all&sort=alpha&page=5&_=1481013713658
+        ·µ»ØµÄÊÇÒ»¸öjson£¬¾ÍÊÇÆÀÂÛµÄÄÚÈİ£¬ÄÜ·ñÖ»ÇëÇóÕâ¸öjsonÄØ£¿
+        ²ÎÊıÓĞ£ºcount¡¢comment¡¢symbol¡¢hl¡¢source¡¢sort¡¢page¡¢_
+        countÎªÃ¿Ò³µÄÌû×ÓÊıÁ¿
+        commentÎ´Öª
+        symbolÎª¹ÉÆ±ID
+        hlÎ´Öª
+        sourceÎ´Öª
+        sortÎªÅÅĞò·½Ê½£¬time±íÊ¾°´Ê±¼äÅÅĞò£¬alpha±íÊ¾°´Ìû×ÓÈÈ¶ÈÅÅĞò
+        pageÎªÒ³ÃæÊı
+        _ÎªÊ±¼ä´Á
+    """
+    cookies={
+        "bid":"245d7b1e72c5afb4f22e2709275454ac_iwbw50ic",
+        "s":"8s19kxfky4", #Õâ¸öÖµÔÚä¯ÀÀÆ÷ÖĞÊÇ¶¯Ì¬±ä»¯µÄ£¬µ«ÊÇÉèÖÃÎª¹Ì¶¨ÈÔÈ»³É¹¦ÁË£¬Õâ¸öÎÊÌâÃ»ÓĞ½â¾ö£¡
+        "snbim_minify":"True",
+        "xq_a_token":"47697ade308c557aab035d60928e25f3e4dea8f6",
+        "xq_r_token":"c802a9a38f3d779d8181f536020f1da0e6a6c2e5"
+    }
+
+    def start_requests(self):
+        for id in self.stock_ids:
+            url = self.start_urls + id
+            yield Request(url,meta={"stock_id":id},callback=self.parse)
+
+
     def parse(self, response):
-        selector = Selector(response)
-        ullist = selector.xpath("//div[@id='statusList']/ul[@class='status-list']").extract()
-        if ullist:
-            print(ullist)
+        count = 10
+        comment = 0
+        symbol = response.meta["stock_id"]
+        hl = 0
+        source = "all"
+        sort = "time"
+        pages = range(100,1)
+        page = 1
+        current_time = time.time() #»ñÈ¡µ±Ç°Ê±¼ä´Á
+        #³É¹¦ÁË£¬ĞèÒªÌí¼ÓÉÏÃæµÄ²ÎÊı£¬¾ßÌå½âÊÍ¼ûÉÏ²¿
+        parse_url = "https://xueqiu.com/statuses/search.json?count={0}&comment={1}&symbol={2}&hl={3}&source={4}&sort={5}&page={6}&_={7}".format(
+                            count,comment,symbol,hl,source,sort,page,current_time) #¸ñÁ¦µçÆ÷
+        print("MyCookie",self.cookies)
+        print("·ÃÎÊµÄurl:",parse_url)
+        yield Request(parse_url,cookies=self.cookies,dont_filter=True,callback=self.parse_page)
+
+
+
+    def parse_page(self,response):
+        postings = response.body.decode()
+        print(postings)
+        #postdict = dict(postings)
+
+        postjson =  json.loads(postings)
+        print(postjson)
+
+
+
 

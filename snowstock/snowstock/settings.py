@@ -14,6 +14,7 @@ BOT_NAME = 'snowstock'
 SPIDER_MODULES = ['snowstock.spiders']
 NEWSPIDER_MODULE = 'snowstock.spiders'
 
+DOWNLOAD_DELAY = 2   #设置下载间隔为250ms
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'snowstock (+http://www.yourdomain.com)'
